@@ -24,12 +24,9 @@ git clone https://github.com/Larissanoella-05/Sparse_matrix.git
 
 
 ```
-cd Sparse_matrix
+cd Sparse_matrix/SparseMatrix
 ```
 
-```
-cd SparseMatrix
-```
 
 ## Matrix operation
 
@@ -38,4 +35,9 @@ python main.py C:/Users/Pc/Desktop/Sparse_matrix/SparseMatrix/Input/test1.txt C:
 trix/Input/test2.txt
 
 ```
-### NB:Make sure python is installed
+### NB: Make sure python is installed
+
+
+
+### Author
+Shimirwa larissa Noella
