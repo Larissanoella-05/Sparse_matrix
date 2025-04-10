@@ -28,7 +28,7 @@ cd Sparse_matrix/SparseMatrix
 ```
 
 
-## Sample tests
+## Test cases
 
 ```
 python main.py C:/Users/Pc/Desktop/Sparse_matrix/SparseMatrix/Input/test1.txt C:/Users/Pc/Desktop/Sparse_matrix/SparseMa
