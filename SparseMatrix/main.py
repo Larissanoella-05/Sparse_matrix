@@ -18,15 +18,14 @@ class SparseMatrix:
                 if len(lines) < 1:
                     raise ValueError("File is empty")
                 
-                # First determine if dimensions are explicitly provided
                 explicit_dimensions = False
                 try:
-                    if '=' in lines[0]:  # Format: rows=X
+                    if '=' in lines[0]: 
                         numRows = int(lines[0].strip().split('=')[1])
                         numCols = int(lines[1].strip().split('=')[1])
                         data_start_line = 2
                         explicit_dimensions = True
-                    else:  # Try first line as dimensions: rows cols
+                    else:  
                         dims = lines[0].strip().split()
                         if len(dims) >= 2 and all(d.isdigit() for d in dims[:2]):
                             numRows = int(dims[0])
@@ -34,51 +33,51 @@ class SparseMatrix:
                             data_start_line = 1
                             explicit_dimensions = True
                         else:
-                            # Assume no dimensions provided, start parsing from line 0
+                           
                             data_start_line = 0
                             numRows = 0
                             numCols = 0
                 except Exception:
-                    # Assume no dimensions provided
+                   
                     data_start_line = 0
                     numRows = 0
                     numCols = 0
                 
-                # Initialize matrix
+              
                 matrix = SparseMatrix(numRows, numCols)
                 max_row = 0
                 max_col = 0
                 
-                # Process data lines
+               
                 for i, line in enumerate(lines[data_start_line:], data_start_line + 1):
                     line = line.strip()
-                    if not line:  # Skip empty lines
+                    if not line: 
                         continue
                     
                     try:
-                        # Try different formats
+                       
                         if line.startswith('(') and line.endswith(')'):
-                            # Format: (row,col,val)
+                           
                             parts = line[1:-1].split(',')
                             row, col, val = map(int, parts)
                         else:
-                            # Format: row col val (space-separated)
+                           
                             parts = line.split()
                             if len(parts) != 3:
                                 raise ValueError(f"Expected 3 values for row col val, got {len(parts)}")
                             row, col, val = map(int, parts)
                         
-                        # Track maximum dimensions
+                      
                         max_row = max(max_row, row)
                         max_col = max(max_col, col)
                         
-                        # Store the value
-                        if val != 0:  # Only store non-zero values
+                      
+                        if val != 0:  
                             matrix.matrix[(row, col)] = val
                     except Exception as e:
                         raise ValueError(f"Error parsing line {i}: '{line}' - {str(e)}")
                 
-                # Update dimensions if needed
+                
                 if not explicit_dimensions or (max_row >= matrix.numRows or max_col >= matrix.numCols):
                     matrix.numRows = max(matrix.numRows, max_row + 1)
                     matrix.numCols = max(matrix.numCols, max_col + 1)
@@ -89,11 +88,11 @@ class SparseMatrix:
             raise ValueError(f"Input file has wrong format: {str(e)}") from e
     
     def getElement(self, row, col):
-        # Don't enforce bounds checking for reading
+
         return self.matrix.get((row, col), 0)
     
     def setElement(self, row, col, value):
-        # Auto-expand matrix if needed
+      
         if row >= self.numRows:
             self.numRows = row + 1
         if col >= self.numCols:
@@ -121,12 +120,12 @@ class SparseMatrix:
         if not isinstance(other, SparseMatrix):
             raise ValueError("Matrices can only be added to matrices")
         
-        # Check if matrices are compatible by normal dimensions or transposition
+       
         if self.numRows == other.numRows and self.numCols == other.numCols:
-            # Normal addition
+         
             result = SparseMatrix(self.numRows, self.numCols)
             
-            # Add all non-zero elements from both matrices
+           
             for (row, col), value in self.matrix.items():
                 result[(row, col)] = value
             
@@ -134,13 +133,13 @@ class SparseMatrix:
                 result[(row, col)] = result[(row, col)] + value
         
         elif self.numRows == other.numCols and self.numCols == other.numRows:
-            # Transpose second matrix for addition
+          
             print("Transposing second matrix for addition...")
             other_transposed = other.transpose()
             
             result = SparseMatrix(self.numRows, self.numCols)
             
-            # Add all non-zero elements from both matrices
+  
             for (row, col), value in self.matrix.items():
                 result[(row, col)] = value
             
@@ -155,31 +154,31 @@ class SparseMatrix:
         if not isinstance(other, SparseMatrix):
             raise ValueError("Matrices can only be subtracted from matrices")
         
-        # Check if matrices are compatible by normal dimensions or transposition
+       
         if self.numRows == other.numRows and self.numCols == other.numCols:
-            # Normal subtraction
+         
             result = SparseMatrix(self.numRows, self.numCols)
             
-            # Add all non-zero elements from self
+     
             for (row, col), value in self.matrix.items():
                 result[(row, col)] = value
             
-            # Subtract all non-zero elements from other
+           
             for (row, col), value in other.matrix.items():
                 result[(row, col)] = result[(row, col)] - value
                 
         elif self.numRows == other.numCols and self.numCols == other.numRows:
-            # Transpose second matrix for subtraction
+       
             print("Transposing second matrix for subtraction...")
             other_transposed = other.transpose()
             
             result = SparseMatrix(self.numRows, self.numCols)
             
-            # Add all non-zero elements from self
+            
             for (row, col), value in self.matrix.items():
                 result[(row, col)] = value
             
-            # Subtract all non-zero elements from other transposed
+           
             for (row, col), value in other_transposed.matrix.items():
                 result[(row, col)] = result[(row, col)] - value
         else:
@@ -191,15 +190,15 @@ class SparseMatrix:
         if not isinstance(other, SparseMatrix):
             raise ValueError("Matrices can only be multiplied by matrices")
         
-        # Check if matrices can be multiplied directly
+        
         if self.numCols == other.numRows:
-            # Standard matrix multiplication
+          
             result = SparseMatrix(self.numRows, other.numCols)
             
-            # Optimize multiplication for sparse matrices
+           
             for (i, k), val1 in self.matrix.items():
                 for (k2, j), val2 in other.matrix.items():
-                    if k == k2:  # This is where we can multiply
+                    if k == k2: 
                         current = result.matrix.get((i, j), 0)
                         new_val = current + val1 * val2
                         if new_val != 0:
@@ -207,18 +206,18 @@ class SparseMatrix:
                         elif (i, j) in result.matrix:
                             del result.matrix[(i, j)]
             
-        # Check if transposing second matrix would work
+    
         elif self.numCols == other.numCols and self.numRows != other.numRows:
             print("Transposing second matrix for multiplication...")
             other_transposed = other.transpose()
             
-            # Now we can multiply
+            
             result = SparseMatrix(self.numRows, other_transposed.numCols)
             
-            # Optimize multiplication for sparse matrices
+           
             for (i, k), val1 in self.matrix.items():
                 for (k2, j), val2 in other_transposed.matrix.items():
-                    if k == k2:  # This is where we can multiply
+                    if k == k2: 
                         current = result.matrix.get((i, j), 0)
                         new_val = current + val1 * val2
                         if new_val != 0:
