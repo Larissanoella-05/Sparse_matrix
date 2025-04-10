@@ -28,13 +28,18 @@ cd Sparse_matrix/SparseMatrix
 ```
 
 
-## Matrix operation
+## Sample tests
 
 ```
 python main.py C:/Users/Pc/Desktop/Sparse_matrix/SparseMatrix/Input/test1.txt C:/Users/Pc/Desktop/Sparse_matrix/SparseMa
 trix/Input/test2.txt
 
 ```
+```
+python main.py Input/Copy\ of\ easy_sample_02_1.txt Input/easy_sample_02_1.txt
+
+```
+
 ### NB: Make sure python is installed
 
 
